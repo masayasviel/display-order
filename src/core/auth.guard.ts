@@ -4,9 +4,10 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { eq } from 'drizzle-orm';
+import { Request } from 'express';
 import { type DB, InjectDb } from '@/db/db';
 import { User } from '@/db/schema';
-import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
