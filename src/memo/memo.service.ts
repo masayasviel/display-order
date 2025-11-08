@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { eq, and } from 'drizzle-orm';
-import { type DB, InjectDb } from '@/db/db.provider';
+import { type DB, InjectDb } from '@/db/db';
 import { Memo } from '@/db/schema';
 import { CreateMemoDto, UpdateMemoDto } from './memo.zod';
 

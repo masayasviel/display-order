@@ -4,7 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { type DB, InjectDb } from '@/db/db.provider';
+import { type DB, InjectDb } from '@/db/db';
 import { User } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
