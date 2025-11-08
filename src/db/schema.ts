@@ -12,6 +12,8 @@ export const User = mysqlTable('user', {
   code: varchar('code', { length: 256 }).notNull().unique('uniq_code'),
 });
 
+export type UserInterface = typeof User.$inferSelect;
+
 export const Memo = mysqlTable('memo', {
   id: int('id').autoincrement().primaryKey(),
   createdAt: timestamp('created_at', { mode: 'string' }).notNull().defaultNow(),
@@ -22,3 +24,5 @@ export const Memo = mysqlTable('memo', {
   title: varchar('title', { length: 256 }).notNull(),
   content: text('content').notNull(),
 });
+
+export type MemoInterface = typeof Memo.$inferSelect;
