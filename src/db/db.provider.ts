@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { Inject, Global, Module } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { drizzle } from 'drizzle-orm/mysql2';
 import mysql from 'mysql2/promise';
 
@@ -15,16 +15,9 @@ export type DB = typeof db;
 
 export const DB_PROVIDER = 'DbProvider';
 
-const dbProvider = {
+export const dbProvider = {
   provide: DB_PROVIDER,
   useValue: db,
 };
 
 export const InjectDb = () => Inject(DB_PROVIDER);
-
-@Global()
-@Module({
-  providers: [dbProvider],
-  exports: [dbProvider],
-})
-export class DbModule {}
