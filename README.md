@@ -2,6 +2,7 @@
 
 ```shell
 npm i
+cp example.env .env
 ```
 
 ## serve
