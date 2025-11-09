@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
 
 import { type DB, InjectDb } from '@/db/db';
@@ -14,24 +18,36 @@ export class MemoService {
     return this.db.select().from(Memo);
   }
 
-  detail(userId: number, memoId: number) {
-    return this.db
+  async detail(userId: number, memoId: number) {
+    const res = await this.db
       .select()
       .from(Memo)
       .where(and(eq(Memo.id, memoId), eq(Memo.userId, userId)));
+    if (res.length === 0) {
+      throw new NotFoundException();
+    }
+    return res[0];
   }
 
   async register(userId: number, createCatDto: CreateMemoDto) {
-    await this.db.insert(Memo).values([
-      {
-        userId,
-        title: createCatDto.title,
-        content: createCatDto.content,
-      },
-    ]);
+    const insertMemo = await this.db
+      .insert(Memo)
+      .values([
+        {
+          userId,
+          title: createCatDto.title,
+          content: createCatDto.content,
+        },
+      ])
+      .$returningId();
+    if (insertMemo.length !== 1) {
+      throw new InternalServerErrorException();
+    }
+    return this.detail(userId, insertMemo[0].id);
   }
 
   async edit(userId: number, memoId: number, updateCatDto: UpdateMemoDto) {
+    await this.detail(userId, memoId);
     await this.db
       .update(Memo)
       .set({ title: updateCatDto.title, content: updateCatDto.content })
@@ -39,6 +55,7 @@ export class MemoService {
   }
 
   async delete_(userId: number, memoId: number) {
+    await this.detail(userId, memoId);
     await this.db
       .delete(Memo)
       .where(and(eq(Memo.id, memoId), eq(Memo.userId, userId)));
