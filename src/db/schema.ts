@@ -2,8 +2,8 @@ import {
   int,
   mysqlTable,
   text,
-  varchar,
   timestamp,
+  varchar,
 } from 'drizzle-orm/mysql-core';
 
 export const User = mysqlTable('user', {

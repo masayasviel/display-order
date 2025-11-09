@@ -10,10 +10,12 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
+
 import { AuthGuard } from '@/core/auth.guard';
-import { ZodValidationPipe } from '@/core/zod-validation.pipe';
 import { RequestUser } from '@/core/request.decorator';
+import { ZodValidationPipe } from '@/core/zod-validation.pipe';
 import { type UserInterface } from '@/db/schema';
+
 import { MemoService } from './memo.service';
 import {
   type CreateMemoDto,
