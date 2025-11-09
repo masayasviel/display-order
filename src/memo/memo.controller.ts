@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   ParseIntPipe,
   Patch,
@@ -29,21 +30,24 @@ export class MemoController {
 
   @Get()
   @UseGuards(AuthGuard)
+  @HttpCode(200)
   list() {
     return this.service.list();
   }
 
   @Post()
   @UseGuards(AuthGuard)
+  @HttpCode(201)
   create(
     @RequestUser() user: UserInterface,
     @Body(new ZodValidationPipe(createMemoSchema)) createCatDto: CreateMemoDto,
   ) {
-    this.service.register(user.id, createCatDto).then();
+    return this.service.register(user.id, createCatDto);
   }
 
   @Get(':id')
   @UseGuards(AuthGuard)
+  @HttpCode(200)
   detail(
     @RequestUser() user: UserInterface,
     @Param('id', ParseIntPipe) id: number,
@@ -53,20 +57,22 @@ export class MemoController {
 
   @Patch(':id')
   @UseGuards(AuthGuard)
-  update(
+  @HttpCode(201)
+  async update(
     @RequestUser() user: UserInterface,
     @Param('id', ParseIntPipe) id: number,
     @Body(new ZodValidationPipe(updateMemoSchema)) updateCatDto: UpdateMemoDto,
   ) {
-    this.service.edit(user.id, id, updateCatDto).then();
+    await this.service.edit(user.id, id, updateCatDto);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
-  delete_(
+  @HttpCode(204)
+  async delete_(
     @RequestUser() user: UserInterface,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    this.service.delete_(user.id, id).then();
+    await this.service.delete_(user.id, id).then();
   }
 }
