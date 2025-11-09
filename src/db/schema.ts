@@ -17,7 +17,10 @@ export type UserInterface = typeof User.$inferSelect;
 export const Memo = mysqlTable('memo', {
   id: int('id').autoincrement().primaryKey(),
   createdAt: timestamp('created_at', { mode: 'string' }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { mode: 'string' })
+    .notNull()
+    .defaultNow()
+    .onUpdateNow(),
   userId: int('user_id')
     .notNull()
     .references(() => User.id, { onDelete: 'cascade' }),
