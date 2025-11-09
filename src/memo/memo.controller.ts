@@ -8,7 +8,6 @@ import {
   Patch,
   Post,
   UseGuards,
-  UsePipes,
 } from '@nestjs/common';
 
 import { AuthGuard } from '@/core/auth.guard';
@@ -36,10 +35,9 @@ export class MemoController {
 
   @Post()
   @UseGuards(AuthGuard)
-  @UsePipes(new ZodValidationPipe(createMemoSchema))
   create(
     @RequestUser() user: UserInterface,
-    @Body() createCatDto: CreateMemoDto,
+    @Body(new ZodValidationPipe(createMemoSchema)) createCatDto: CreateMemoDto,
   ) {
     this.service.register(user.id, createCatDto).then();
   }
@@ -55,11 +53,10 @@ export class MemoController {
 
   @Patch(':id')
   @UseGuards(AuthGuard)
-  @UsePipes(new ZodValidationPipe(updateMemoSchema))
   update(
     @RequestUser() user: UserInterface,
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateCatDto: UpdateMemoDto,
+    @Body(new ZodValidationPipe(updateMemoSchema)) updateCatDto: UpdateMemoDto,
   ) {
     this.service.edit(user.id, id, updateCatDto).then();
   }

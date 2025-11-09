@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
-    const userCode = request.headers['user-code'];
+    const userCode = request.headers['x-user-code'];
     if (!userCode || typeof userCode !== 'string') {
       throw new UnauthorizedException();
     }
@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate {
     if (user.length === 0) {
       throw new UnauthorizedException();
     }
-    request['user'] = user;
+    request['user'] = user[0];
     return true;
   }
 
