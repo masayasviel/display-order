@@ -14,8 +14,8 @@ import { CreateMemoDto, UpdateMemoDto } from './memo.zod';
 export class MemoService {
   constructor(@InjectDb() private readonly db: DB) {}
 
-  list() {
-    return this.db.select().from(Memo);
+  list(userId: number) {
+    return this.db.select().from(Memo).where(eq(Memo.userId, userId));
   }
 
   async detail(userId: number, memoId: number) {

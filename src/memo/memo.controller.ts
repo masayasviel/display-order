@@ -31,8 +31,8 @@ export class MemoController {
   @Get()
   @UseGuards(AuthGuard)
   @HttpCode(200)
-  list() {
-    return this.service.list();
+  list(@RequestUser() user: UserInterface) {
+    return this.service.list(user.id);
   }
 
   @Post()
